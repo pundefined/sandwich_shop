@@ -9,6 +9,12 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return MaterialApp(
+        home: Scaffold(
+      appBar: AppBar(title: const Text('Sandwich Counter')),
+      body: const Center(
+        child: Text('Welcome to the Sandwich Shop!'),
+      ),
+    ));
   }
 }
