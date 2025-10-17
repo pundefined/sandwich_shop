@@ -11,11 +11,15 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
-      appBar: AppBar(title: const Text('Sandwich Counter')),
-      body: const Center(
-        child: OrderItemDisplay(5, 'Footlong'),
-      ),
-    ));
+            appBar: AppBar(title: const Text('Sandwich Counter')),
+            body: Center(
+                child: Container(
+              width: 500,
+              height: 400,
+              color: Colors.lime,
+              alignment: Alignment.center,
+              child: const OrderItemDisplay(5, 'Footlong'),
+            ))));
   }
 }
 
