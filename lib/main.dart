@@ -31,6 +31,8 @@ class _OrderScreenState extends State<OrderScreen> {
   int _quantity = 0;
   String _note = '';
   late final TextEditingController _noteController;
+  String _selectedType = 'Footlong';
+  static const List<String> _sandwichTypes = ['Footlong', 'Six-inch'];
 
   @override
   void initState() {
@@ -75,8 +77,29 @@ class _OrderScreenState extends State<OrderScreen> {
           children: <Widget>[
             OrderItemDisplay(
               _quantity,
-              'Footlong',
+              _selectedType,
               note: _note,
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              width: 320,
+              child: DropdownButtonFormField<String>(
+                value: _selectedType,
+                decoration: const InputDecoration(
+                  labelText: 'Sandwich type',
+                  border: OutlineInputBorder(),
+                ),
+                items: _sandwichTypes
+                    .map((t) => DropdownMenuItem<String>(
+                          value: t,
+                          child: Text(t),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  if (value == null) return;
+                  setState(() => _selectedType = value);
+                },
+              ),
             ),
             const SizedBox(height: 16),
             SizedBox(
