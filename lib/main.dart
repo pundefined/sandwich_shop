@@ -84,7 +84,7 @@ class _OrderScreenState extends State<OrderScreen> {
             SizedBox(
               width: 320,
               child: DropdownButtonFormField<String>(
-                value: _selectedType,
+                initialValue: _selectedType,
                 decoration: const InputDecoration(
                   labelText: 'Sandwich type',
                   border: OutlineInputBorder(),
