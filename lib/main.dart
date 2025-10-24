@@ -49,6 +49,7 @@ class _OrderScreenState extends State<OrderScreen> {
       setState(() {
         _note = _noteController.text;
         _quantity++;
+        print('Current quantity: $_quantity');
       });
     }
   }
