@@ -83,21 +83,15 @@ class _OrderScreenState extends State<OrderScreen> {
             const SizedBox(height: 8),
             SizedBox(
               width: 320,
-              child: DropdownButtonFormField<String>(
-                initialValue: _selectedType,
-                decoration: const InputDecoration(
-                  labelText: 'Sandwich type',
-                  border: OutlineInputBorder(),
-                ),
-                items: _sandwichTypes
-                    .map((t) => DropdownMenuItem<String>(
-                          value: t,
-                          child: Text(t),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  if (value == null) return;
-                  setState(() => _selectedType = value);
+              child: SegmentedButton<String>(
+                segments: const <ButtonSegment<String>>[
+                  ButtonSegment(value: 'Footlong', label: Text('Footlong')),
+                  ButtonSegment(value: 'Six-inch', label: Text('Six-inch')),
+                ],
+                selected: <String>{_selectedType},
+                onSelectionChanged: (Set<String> newSelection) {
+                  if (newSelection.isEmpty) return;
+                  setState(() => _selectedType = newSelection.first);
                 },
               ),
             ),
