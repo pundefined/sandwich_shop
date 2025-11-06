@@ -72,7 +72,7 @@ lib/
 ### Change Max Quantity
 Edit the `maxQuantity` parameter in `main.dart`:
 ```dart
-home: OrderScreen(maxQuantity: 10), // change this value
+home: OrderScreen(maxQuantity: 5), // change this value
 ```
 
 ## Tech Stack
