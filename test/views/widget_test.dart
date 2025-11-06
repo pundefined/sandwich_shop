@@ -167,5 +167,13 @@ void main() {
           find.text('1 wholemeal footlong sandwich(es): 🥪'), findsOneWidget);
       expect(find.text('Note: Lots of lettuce'), findsOneWidget);
     });
+
+    testWidgets('toggles sandwich length when Switch tapped',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      await tester.tap(find.byType(Switch));
+      await tester.pump();
+      expect(find.text('0 white six-inch sandwich(es): '), findsOneWidget);
+    });
   });
 }
