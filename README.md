@@ -4,12 +4,12 @@ A Flutter application for ordering customizable sandwiches with real-time order 
 
 ## Features
 
-- **Sandwich Type Selection**: Choose between Footlong and Six-inch sandwiches using a SegmentedButton
+- **Sandwich Type Selection**: Toggle between Footlong and Six-inch sandwiches using a Switch
 - **Bread Type Options**: Select from White, Wheat, or Wholemeal bread via dropdown menu
 - **Quantity Management**: Add or remove items from your order with disable state at limits
 - **Special Requests**: Add custom notes (e.g., "no onions", "extra pickles") to your sandwich
 - **Order Display**: Real-time display of sandwich type, quantity, bread choice, and special notes
-- **Quantity Limits**: Configurable maximum order quantity (default: 10)
+- **Quantity Limits**: Configurable maximum order quantity (default: 5)
 
 ## Project Structure
 
@@ -33,7 +33,7 @@ lib/
 
 1. **Clone or navigate to the project**:
    ```bash
-   cd ~/PAPL/sandwich_shop
+   cd <your_path>/sandwich_shop
    ```
 
 2. **Get dependencies**:
@@ -50,9 +50,9 @@ lib/
 
 ### Ordering a Sandwich
 
-1. **Select Sandwich Type**: Use the SegmentedButton to choose between Footlong or Six-inch
-2. **Choose Bread**: Select your preferred bread type (White, Wheat, Wholemeal) from the dropdown
-3. **Add Special Notes** (optional): Type any special requests in the "Order note" text field
+1. **Select Sandwich Type**: Use the Switch to toggle between Six-inch and Footlong
+2. **Choose Bread**: Select your preferred bread type (White, Wheat, Wholemeal) from the dropdown menu
+3. **Add Notes** (optional): Type any special requests in the "Add a note" text field
 4. **Adjust Quantity**: 
    - Press **Add** to increase order quantity
    - Press **Remove** to decrease quantity
@@ -61,7 +61,7 @@ lib/
 
 ### UI Components
 
-- **SegmentedButton**: Quick sandwich size selection
+- **Switch**: Toggle between sandwich sizes (Six-inch ↔ Footlong)
 - **DropdownMenu**: Bread type chooser
 - **TextField**: Notes input for special requests
 - **ElevatedButtons**: Add/Remove quantity (contextually disabled at limits)
@@ -80,15 +80,3 @@ home: OrderScreen(maxQuantity: 10), // change this value
 - **Flutter**: UI framework
 - **Dart**: Programming language
 - **Material Design 3**: UI components and theming
-
-## Future Enhancements
-
-- Order summary and checkout
-- Payment integration
-- Order history
-- Menu customization (toppings, sauces)
-- Nutritional information display
-
----
-
-For questions or issues, refer to the [Flutter documentation](https://flutter.dev/docs).
