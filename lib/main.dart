@@ -32,7 +32,6 @@ class _OrderScreenState extends State<OrderScreen> {
   String _note = '';
   late final TextEditingController _noteController;
   String _selectedType = 'Footlong';
-  static const List<String> _sandwichTypes = ['Footlong', 'Six-inch'];
 
   @override
   void initState() {
