@@ -170,8 +170,9 @@ void main() {
 
     testWidgets('toggles sandwich length when Switch tapped',
         (WidgetTester tester) async {
+      const switchKey = Key('LengthSwitch');
       await tester.pumpWidget(const App());
-      await tester.tap(find.byType(Switch));
+      await tester.tap(find.byKey(switchKey));
       await tester.pump();
       expect(find.text('0 white six-inch sandwich(es): '), findsOneWidget);
     });
