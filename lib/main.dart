@@ -108,7 +108,6 @@ class _OrderScreenState extends State<OrderScreen> {
 
     _pricingRepository.calculateOrderPrice(
         sandwichType, _orderRepository.quantity);
-    int totalPrice = _pricingRepository.price;
 
     return Scaffold(
       appBar: AppBar(
@@ -126,7 +125,7 @@ class _OrderScreenState extends State<OrderScreen> {
               itemType: sandwichType,
               breadType: _selectedBreadType,
               orderNote: noteForDisplay,
-              totalPrice: totalPrice,
+              totalPrice: _pricingRepository.price,
             ),
             const SizedBox(height: 20),
             Row(
