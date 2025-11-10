@@ -247,7 +247,7 @@ class OrderItemDisplay extends StatelessWidget {
     required this.itemType,
     required this.breadType,
     required this.orderNote,
-    required this.totalPrice,
+    this.totalPrice = 0,
   });
 
   @override
