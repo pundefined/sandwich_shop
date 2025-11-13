@@ -58,6 +58,14 @@ void main() {
   });
 
   group('OrderScreen - Controls', () {
+    testWidgets('toggles sandwich type with Switch',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      expect(find.textContaining('footlong sandwich'), findsOneWidget);
+      await tester.tap(find.byType(Switch));
+      await tester.pump();
+      expect(find.textContaining('six-inch sandwich'), findsOneWidget);
+    });
     testWidgets('changes bread type with DropdownMenu',
         (WidgetTester tester) async {
       await tester.pumpWidget(const App());
@@ -166,15 +174,6 @@ void main() {
       expect(
           find.text('1 wholemeal footlong sandwich(es): 🥪'), findsOneWidget);
       expect(find.text('Note: Lots of lettuce'), findsOneWidget);
-    });
-
-    testWidgets('toggles sandwich length when Switch tapped',
-        (WidgetTester tester) async {
-      const switchKey = Key('LengthSwitch');
-      await tester.pumpWidget(const App());
-      await tester.tap(find.byKey(switchKey));
-      await tester.pump();
-      expect(find.text('0 white six-inch sandwich(es): '), findsOneWidget);
     });
   });
 }

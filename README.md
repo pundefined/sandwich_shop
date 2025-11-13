@@ -1,82 +1,76 @@
-# Sandwich Shop App
+# Sandwich Shop
 
-A Flutter application for ordering customizable sandwiches with real-time order management.
+This is a simple Flutter app that allows users to order sandwiches.
+The app is built using Flutter and Dart, and it is designed primarily to be run in a web
+browser.
 
-## Features
+## Install the essential tools
 
-- **Sandwich Type Selection**: Toggle between Footlong and Six-inch sandwiches using a Switch
-- **Bread Type Options**: Select from White, Wheat, or Wholemeal bread via dropdown menu
-- **Quantity Management**: Add or remove items from your order with disable state at limits
-- **Special Requests**: Add custom notes (e.g., "no onions", "extra pickles") to your sandwich
-- **Order Display**: Real-time display of sandwich type, quantity, bread choice, and special notes
-- **Quantity Limits**: Configurable maximum order quantity (default: 5)
+1. **Terminal**:
 
-## Project Structure
+    - **macOS** – use the built-in Terminal app by pressing **⌘ + Space**, typing **Terminal**, and pressing **Return**.
+    - **Windows** – open the start menu using the **Windows** key. Then enter **cmd** to open the **Command Prompt**. Alternatively, you can use **Windows PowerShell** or **Windows Terminal**.
 
-```
-lib/
-  main.dart                 # Main app entry point, UI widgets
-  repositories/
-    order_repository.dart   # Order state and quantity management
-  views/
-    app_styles.dart         # Text styles and app theming
-```
+2. **Git** – verify that you have `git` installed by entering `git --version`, in the terminal.
+    If this is missing, download the installer from [Git's official site](https://git-scm.com/downloads?utm_source=chatgpt.com).
 
-## Installation & Setup
+3. **Package managers**:
 
-### Prerequisites
-- Flutter SDK (latest stable)
-- Dart SDK (included with Flutter)
-- An IDE (VS Code, Android Studio, or IntelliJ)
+    - **Homebrew** (macOS) – verify that you have `brew` installed with `brew --version`; if missing, follow the instructions on the [Homebrew installation page](https://brew.sh/).
+    - **Chocolatey** (Windows) – verify that you have `choco` installed with `choco --version`; if missing, follow the instructions on the [Chocolatey installation page](https://chocolatey.org/install).
 
-### Steps
+4. **Flutter SDK** – verify that you have `flutter` installed and it is working with `flutter doctor`; if missing, install it using your package manager:
 
-1. **Clone or navigate to the project**:
-   ```bash
-   cd <your_path>/sandwich_shop
-   ```
+    - **macOS**: `brew install --cask flutter`
+    - **Windows**: `choco install flutter`
 
-2. **Get dependencies**:
-   ```bash
-   flutter pub get
-   ```
+5. **Visual Studio Code** – verify that you have `code` installed with `code --version`; if missing, use your package manager to install it:
 
-3. **Run the app**:
-   ```bash
-   flutter run
-   ```
+    - **macOS**: `brew install --cask visual-studio-code`
+    - **Windows**: `choco install vscode`
 
-## Usage Instructions
+## Get the code
 
-### Ordering a Sandwich
+### If this is your first time working on this project
 
-1. **Select Sandwich Type**: Use the Switch to toggle between Six-inch and Footlong
-2. **Choose Bread**: Select your preferred bread type (White, Wheat, Wholemeal) from the dropdown menu
-3. **Add Notes** (optional): Type any special requests in the "Add a note" text field
-4. **Adjust Quantity**: 
-   - Press **Add** to increase order quantity
-   - Press **Remove** to decrease quantity
-   - Buttons disable when you reach the quantity limit (default max: 5)
-5. **View Order**: The OrderItemDisplay shows your current selection in real-time
+Enter the following commands in your terminal to clone the repository and
+open it in Visual Studio Code.
+You may want to change directory (`cd`) to the directory where you want to clone the
+repository first.
 
-### UI Components
-
-- **Switch**: Toggle between sandwich sizes (Six-inch ↔ Footlong)
-- **DropdownMenu**: Bread type chooser
-- **TextField**: Notes input for special requests
-- **ElevatedButtons**: Add/Remove quantity (contextually disabled at limits)
-- **StyledButton**: Custom-styled action buttons
-
-## Configuration
-
-### Change Max Quantity
-Edit the `maxQuantity` parameter in `main.dart`:
-```dart
-home: OrderScreen(maxQuantity: 5), // change this value
+```bash
+git clone --branch 5 https://github.com/manighahrmani/sandwich_shop
+cd sandwich_shop
+code .
 ```
 
-## Tech Stack
+### If you have already cloned the repository
 
-- **Flutter**: UI framework
-- **Dart**: Programming language
-- **Material Design 3**: UI components and theming
+Enter the following commands in your terminal to switch to the correct branch.
+Remember to `cd` to the directory where you cloned the repository first.
+
+```bash
+git fetch origin
+git checkout 5
+```
+
+## Run the app
+
+Open the integrated terminal in Visual Studio Code by first opening the Command
+Palette with **⌘ + Shift + P** (macOS) or **Ctrl + Shift + P** (Windows) and
+typing **Terminal: Create New Terminal** then pressing **Enter**.
+
+In the terminal, run the following commands to install the dependencies and run
+the app in your web browser:
+
+```bash
+flutter pub get
+flutter run
+```
+
+## Get support
+
+Use [the dedicated Discord channel](https://discord.com/channels/760155974467059762/1370633732779933806)
+to ask your questions and get help from the community.
+Please provide as much context as possible, including the error messages you are seeing and
+screenshots (you can open Discord in your web browser).

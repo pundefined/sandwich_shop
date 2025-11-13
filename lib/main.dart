@@ -34,11 +34,10 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   late final OrderRepository _orderRepository;
-  late final PricingRepository _pricingRepository;
   final TextEditingController _notesController = TextEditingController();
   bool _isFootlong = true;
-  bool _isToasted = false;
   BreadType _selectedBreadType = BreadType.white;
+  late final PricingRepository _pricingRepository;
 
   @override
   void initState() {
@@ -94,6 +93,11 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final double totalPrice = _pricingRepository.calculatePrice(
+      quantity: _orderRepository.quantity,
+      isFootlong: _isFootlong,
+    );
+
     String sandwichType = 'footlong';
     if (!_isFootlong) {
       sandwichType = 'six-inch';
@@ -105,9 +109,6 @@ class _OrderScreenState extends State<OrderScreen> {
     } else {
       noteForDisplay = _notesController.text;
     }
-
-    _pricingRepository.calculateOrderPrice(
-        sandwichType, _orderRepository.quantity);
 
     return Scaffold(
       appBar: AppBar(
@@ -125,7 +126,11 @@ class _OrderScreenState extends State<OrderScreen> {
               itemType: sandwichType,
               breadType: _selectedBreadType,
               orderNote: noteForDisplay,
-              totalPrice: _pricingRepository.price,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Total Price: £${totalPrice.toStringAsFixed(2)}',
+              style: heading2,
             ),
             const SizedBox(height: 20),
             Row(
@@ -133,25 +138,10 @@ class _OrderScreenState extends State<OrderScreen> {
               children: [
                 const Text('six-inch', style: normalText),
                 Switch(
-                  key: const ValueKey('LengthSwitch'),
                   value: _isFootlong,
                   onChanged: _onSandwichTypeChanged,
                 ),
                 const Text('footlong', style: normalText),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('untoasted', style: normalText),
-                Switch(
-                  key: const ValueKey('ToastSwitch'),
-                  value: _isToasted,
-                  onChanged: (value) {
-                    setState(() => _isToasted = value);
-                  },
-                ),
-                const Text('toasted', style: normalText),
               ],
             ),
             const SizedBox(height: 10),
@@ -239,7 +229,6 @@ class OrderItemDisplay extends StatelessWidget {
   final String itemType;
   final BreadType breadType;
   final String orderNote;
-  final int totalPrice;
 
   const OrderItemDisplay({
     super.key,
@@ -247,7 +236,6 @@ class OrderItemDisplay extends StatelessWidget {
     required this.itemType,
     required this.breadType,
     required this.orderNote,
-    this.totalPrice = 0,
   });
 
   @override
@@ -264,11 +252,6 @@ class OrderItemDisplay extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           'Note: $orderNote',
-          style: normalText,
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Total: \£$totalPrice',
           style: normalText,
         ),
       ],
