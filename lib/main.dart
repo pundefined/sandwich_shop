@@ -268,7 +268,7 @@ class OrderItemDisplay extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          'Total: \£$totalPrice',
+          'Total: £$totalPrice',
           style: normalText,
         ),
       ],
