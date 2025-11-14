@@ -1,19 +1,20 @@
+import '../models/sandwich.dart';
 import '../repositories/pricing_repository.dart';
 
 class Cart {
-  final Map<bool, int> _items = {}; // Map of isFootlong -> quantity
+  final Map<Sandwich, int> _items = {}; // Map of Sandwich -> quantity
   final PricingRepository _pricingRepository = PricingRepository();
 
-  void addItem({required bool isFootlong, int quantity = 1}) {
-    _items[isFootlong] = (_items[isFootlong] ?? 0) + quantity;
+  void addItem({required Sandwich sandwich, int quantity = 1}) {
+    _items[sandwich] = (_items[sandwich] ?? 0) + quantity;
   }
 
-  void removeItem({required bool isFootlong, int quantity = 1}) {
-    if (!_items.containsKey(isFootlong)) return;
+  void removeItem({required Sandwich sandwich, int quantity = 1}) {
+    if (!_items.containsKey(sandwich)) return;
 
-    _items[isFootlong] = _items[isFootlong]! - quantity;
-    if (_items[isFootlong]! <= 0) {
-      _items.remove(isFootlong);
+    _items[sandwich] = _items[sandwich]! - quantity;
+    if (_items[sandwich]! <= 0) {
+      _items.remove(sandwich);
     }
   }
 
@@ -22,16 +23,17 @@ class Cart {
   }
 
   double get totalPrice {
-    return _items.entries.fold(0.0, (sum, entry) {
-      return sum +
-          _pricingRepository.calculatePrice(
-            quantity: entry.value,
-            isFootlong: entry.key,
-          );
-    });
+    double total = 0.0;
+    for (final entry in _items.entries) {
+      total += _pricingRepository.calculatePrice(
+        quantity: entry.value,
+        isFootlong: entry.key.isFootlong,
+      );
+    }
+    return total;
   }
 
-  Map<bool, int> get items => Map.unmodifiable(_items);
+  Map<Sandwich, int> get items => Map.unmodifiable(_items);
 
   bool get isEmpty => _items.isEmpty;
 
