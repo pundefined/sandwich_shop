@@ -194,6 +194,7 @@ class _OrderScreenState extends State<OrderScreen> {
               ),
               const SizedBox(height: 20),
               DropdownMenu<SandwichType>(
+                key: const ValueKey('sandwichTypeDropdown'),
                 width: double.infinity,
                 label: const Text('Sandwich Type'),
                 textStyle: normalText,
@@ -215,6 +216,7 @@ class _OrderScreenState extends State<OrderScreen> {
               ),
               const SizedBox(height: 20),
               DropdownMenu<BreadType>(
+                key: const ValueKey('breadTypeDropdown'),
                 width: double.infinity,
                 label: const Text('Bread Type'),
                 textStyle: normalText,
