@@ -233,7 +233,8 @@ class _OrderScreenState extends State<OrderScreen> {
                     onPressed: _getDecreaseCallback(),
                     icon: const Icon(Icons.remove),
                   ),
-                  Text('$_quantity', style: heading2),
+                  Text('$_quantity',
+                      key: const ValueKey('quantityText'), style: heading2),
                   IconButton(
                     onPressed: _increaseQuantity,
                     icon: const Icon(Icons.add),
