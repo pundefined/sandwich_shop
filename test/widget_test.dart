@@ -23,7 +23,9 @@ void main() {
     testWidgets('increments quantity when Add is tapped',
         (WidgetTester tester) async {
       await tester.pumpWidget(const App());
-      await tester.tap(find.byIcon(Icons.add));
+      final addButton = find.byIcon(Icons.add);
+      await tester.ensureVisible(addButton);
+      await tester.tap(addButton);
       await tester.pump();
       final quantityText =
           tester.widget<Text>(find.byKey(const ValueKey('quantityText')));
@@ -33,12 +35,16 @@ void main() {
     testWidgets('decrements quantity when Remove is tapped',
         (WidgetTester tester) async {
       await tester.pumpWidget(const App());
-      await tester.tap(find.byIcon(Icons.add));
+      final addButton = find.byIcon(Icons.add);
+      await tester.ensureVisible(addButton);
+      await tester.tap(addButton);
       await tester.pump();
       var quantityText =
           tester.widget<Text>(find.byKey(const ValueKey('quantityText')));
       expect(quantityText.data, '2');
-      await tester.tap(find.byIcon(Icons.remove));
+      final removeButton = find.byIcon(Icons.remove);
+      await tester.ensureVisible(removeButton);
+      await tester.tap(removeButton);
       await tester.pump();
       quantityText =
           tester.widget<Text>(find.byKey(const ValueKey('quantityText')));
@@ -50,7 +56,9 @@ void main() {
       var quantityText =
           tester.widget<Text>(find.byKey(const ValueKey('quantityText')));
       expect(quantityText.data, '1');
-      await tester.tap(find.byIcon(Icons.remove));
+      final removeButton = find.byIcon(Icons.remove);
+      await tester.ensureVisible(removeButton);
+      await tester.tap(removeButton);
       await tester.pump();
       quantityText =
           tester.widget<Text>(find.byKey(const ValueKey('quantityText')));
@@ -60,8 +68,10 @@ void main() {
     testWidgets('does not increment above maxQuantity',
         (WidgetTester tester) async {
       await tester.pumpWidget(const App());
+      final addButton = find.byIcon(Icons.add);
+      await tester.ensureVisible(addButton);
       for (int i = 0; i < 10; i++) {
-        await tester.tap(find.byIcon(Icons.add));
+        await tester.tap(addButton);
         await tester.pump();
       }
       final quantityText =
