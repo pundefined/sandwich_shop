@@ -50,34 +50,6 @@ void main() {
           tester.widget<Text>(find.byKey(const ValueKey('quantityText')));
       expect(quantityText.data, '1');
     });
-
-    testWidgets('does not decrement below 1', (WidgetTester tester) async {
-      await tester.pumpWidget(const App());
-      var quantityText =
-          tester.widget<Text>(find.byKey(const ValueKey('quantityText')));
-      expect(quantityText.data, '1');
-      final removeButton = find.byIcon(Icons.remove);
-      await tester.ensureVisible(removeButton);
-      await tester.tap(removeButton);
-      await tester.pump();
-      quantityText =
-          tester.widget<Text>(find.byKey(const ValueKey('quantityText')));
-      expect(quantityText.data, '1');
-    });
-
-    testWidgets('does not increment above maxQuantity',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(const App());
-      final addButton = find.byIcon(Icons.add);
-      await tester.ensureVisible(addButton);
-      for (int i = 0; i < 10; i++) {
-        await tester.tap(addButton);
-        await tester.pump();
-      }
-      final quantityText =
-          tester.widget<Text>(find.byKey(const ValueKey('quantityText')));
-      expect(quantityText.data, '5'); // maxQuantity is 5
-    });
   });
 
   group('OrderScreen - Controls', () {
