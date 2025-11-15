@@ -4,6 +4,63 @@ import 'package:sandwich_shop/main.dart';
 
 void main() {
   group('OrderScreen - Cart', () {
+    testWidgets('shows correct message for six-inch Chicken Teriyaki on wheat',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      // Change sandwich type
+      await tester.tap(find.byKey(const ValueKey('sandwichTypeDropdown')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Chicken Teriyaki').last);
+      await tester.pumpAndSettle();
+      // Change bread type
+      await tester.tap(find.byKey(const ValueKey('breadTypeDropdown')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('wheat').last);
+      await tester.pumpAndSettle();
+      // Toggle size to six-inch
+      await tester.tap(find.byType(Switch));
+      await tester.pump();
+      // Add to cart
+      final addToCartButton =
+          find.widgetWithText(ElevatedButton, 'Add to Cart');
+      await tester.ensureVisible(addToCartButton);
+      await tester.tap(addToCartButton);
+      await tester.pump();
+      // Check SnackBar message for six-inch
+      expect(find.byType(SnackBar), findsOneWidget);
+      expect(
+        find.textContaining(
+            'Added 1 six-inch Chicken Teriyaki sandwich(es) on wheat bread to cart'),
+        findsOneWidget,
+      );
+    });
+    testWidgets('shows correct message for Chicken Teriyaki on wheat',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      // Change sandwich type
+      await tester.tap(find.byKey(const ValueKey('sandwichTypeDropdown')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Chicken Teriyaki').last);
+      await tester.pumpAndSettle();
+      // Change bread type
+      await tester.tap(find.byKey(const ValueKey('breadTypeDropdown')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('wheat').last);
+      await tester.pumpAndSettle();
+      // Add to cart
+      final addToCartButton =
+          find.widgetWithText(ElevatedButton, 'Add to Cart');
+      await tester.ensureVisible(addToCartButton);
+      await tester.tap(addToCartButton);
+      await tester.pump();
+      // Check SnackBar message
+      expect(find.byType(SnackBar), findsOneWidget);
+      expect(
+        find.textContaining(
+            'Added 1 footlong Chicken Teriyaki sandwich(es) on wheat bread to cart'),
+        findsOneWidget,
+      );
+    });
     testWidgets('adds item to cart when Add to Cart is pressed',
         (WidgetTester tester) async {
       await tester.pumpWidget(const App());
@@ -12,9 +69,13 @@ void main() {
       await tester.ensureVisible(addToCartButton);
       await tester.tap(addToCartButton);
       await tester.pump();
-      // There is no cart UI, but we can check debugPrint output or rely on internal state if exposed.
-      // For now, just ensure the button is enabled and can be tapped.
-      expect(addToCartButton, findsOneWidget);
+      // Check for SnackBar message
+      expect(find.byType(SnackBar), findsOneWidget);
+      expect(
+        find.textContaining(
+            'Added 1 footlong Veggie Delight sandwich(es) on white bread to cart'),
+        findsOneWidget,
+      );
     });
 
     testWidgets('changes quantity and adds correct amount to cart',
@@ -32,8 +93,13 @@ void main() {
       await tester.ensureVisible(addToCartButton);
       await tester.tap(addToCartButton);
       await tester.pump();
-      // Again, no cart UI, but we can check that the button is enabled and can be tapped.
-      expect(addToCartButton, findsOneWidget);
+      // Check for SnackBar message with correct quantity, sandwich, and bread type
+      expect(find.byType(SnackBar), findsOneWidget);
+      expect(
+        find.textContaining(
+            'Added 2 footlong Veggie Delight sandwich(es) on white bread to cart'),
+        findsOneWidget,
+      );
     });
   });
   group('App', () {
