@@ -41,4 +41,16 @@ class Sandwich {
     }
     return 'assets/images/${typeString}_$sizeString.png';
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Sandwich &&
+          runtimeType == other.runtimeType &&
+          type == other.type &&
+          isFootlong == other.isFootlong &&
+          breadType == other.breadType;
+
+  @override
+  int get hashCode => type.hashCode ^ isFootlong.hashCode ^ breadType.hashCode;
 }
