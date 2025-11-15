@@ -251,6 +251,30 @@ class _OrderScreenState extends State<OrderScreen> {
                 backgroundColor: Colors.green,
               ),
               const SizedBox(height: 20),
+              // Cart summary
+              if (_cart.items.isNotEmpty)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Cart Summary:', style: heading2),
+                    ..._cart.items.entries.map((entry) {
+                      final sandwich = entry.key;
+                      final qty = entry.value;
+                      final size =
+                          sandwich.isFootlong ? 'footlong' : 'six-inch';
+                      return Text(
+                        '$qty x $size ${sandwich.name} on ${sandwich.breadType.name} bread',
+                        style: normalText,
+                      );
+                    }),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Total: £${_cart.totalPrice.toStringAsFixed(2)}',
+                      style: heading2,
+                    ),
+                  ],
+                ),
+              const SizedBox(height: 20),
             ],
           ),
         ),
