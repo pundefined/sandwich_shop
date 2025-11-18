@@ -1,94 +1,121 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sandwich_shop/models/sandwich.dart';
 import 'package:sandwich_shop/models/cart.dart';
+import 'package:sandwich_shop/models/sandwich.dart';
 
 void main() {
   group('Cart', () {
     late Cart cart;
-    late Sandwich veggieSixInch;
-    late Sandwich veggieFootlong;
-    late Sandwich chickenSixInch;
+    late Sandwich sandwichA;
+    late Sandwich sandwichB;
 
     setUp(() {
       cart = Cart();
-      veggieSixInch = Sandwich(
+      sandwichA = Sandwich(
         type: SandwichType.veggieDelight,
         isFootlong: false,
         breadType: BreadType.wheat,
       );
-      veggieFootlong = Sandwich(
-        type: SandwichType.veggieDelight,
+      sandwichB = Sandwich(
+        type: SandwichType.chickenTeriyaki,
         isFootlong: true,
         breadType: BreadType.white,
       );
-      chickenSixInch = Sandwich(
-        type: SandwichType.chickenTeriyaki,
-        isFootlong: false,
-        breadType: BreadType.wholemeal,
-      );
     });
 
-    test('isEmpty returns true for new cart', () {
+    test('should start empty', () {
       expect(cart.isEmpty, isTrue);
+      expect(cart.length, 0);
+      expect(cart.items, isEmpty);
     });
 
-    test('addItem increases item count', () {
-      cart.addItem(sandwich: veggieSixInch);
-      expect(cart.itemCount, equals(1));
+    test('should add a sandwich with default quantity 1', () {
+      cart.add(sandwichA);
+      expect(cart.getQuantity(sandwichA), 1);
+      expect(cart.length, 1);
+      expect(cart.isEmpty, isFalse);
     });
 
-    test('addItem with quantity adds multiple items', () {
-      cart.addItem(sandwich: veggieSixInch, quantity: 3);
-      expect(cart.itemCount, equals(3));
+    test('should add a sandwich with custom quantity', () {
+      cart.add(sandwichA, quantity: 3);
+      expect(cart.getQuantity(sandwichA), 3);
+      expect(cart.length, 1);
     });
 
-    test('addItem stacks quantities for same sandwich', () {
-      cart.addItem(sandwich: veggieSixInch, quantity: 2);
-      cart.addItem(sandwich: veggieSixInch, quantity: 3);
-      expect(cart.items[veggieSixInch], equals(5));
+    test('should increase quantity if same sandwich is added again', () {
+      cart.add(sandwichA);
+      cart.add(sandwichA, quantity: 2);
+      expect(cart.getQuantity(sandwichA), 3);
     });
 
-    test('removeItem decreases quantity', () {
-      cart.addItem(sandwich: veggieSixInch, quantity: 3);
-      cart.removeItem(sandwich: veggieSixInch);
-      expect(cart.itemCount, equals(2));
+    test('should add multiple different sandwiches', () {
+      cart.add(sandwichA);
+      cart.add(sandwichB, quantity: 2);
+      expect(cart.getQuantity(sandwichA), 1);
+      expect(cart.getQuantity(sandwichB), 2);
+      expect(cart.length, 2);
     });
 
-    test('removeItem removes sandwich when quantity reaches zero', () {
-      cart.addItem(sandwich: veggieSixInch, quantity: 1);
-      cart.removeItem(sandwich: veggieSixInch);
-      expect(cart.items.containsKey(veggieSixInch), isFalse);
+    test('should remove quantity of a sandwich', () {
+      cart.add(sandwichA, quantity: 3);
+      cart.remove(sandwichA, quantity: 2);
+      expect(cart.getQuantity(sandwichA), 1);
+      expect(cart.length, 1);
     });
 
-    test('removeItem does nothing for non-existent sandwich', () {
-      cart.removeItem(sandwich: veggieSixInch);
+    test('should remove sandwich completely if quantity drops to zero', () {
+      cart.add(sandwichA, quantity: 2);
+      cart.remove(sandwichA, quantity: 2);
+      expect(cart.getQuantity(sandwichA), 0);
       expect(cart.isEmpty, isTrue);
+      expect(cart.length, 0);
     });
 
-    test('clearCart empties the cart', () {
-      cart.addItem(sandwich: veggieSixInch, quantity: 2);
-      cart.addItem(sandwich: chickenSixInch, quantity: 1);
-      cart.clearCart();
+    test('should not throw an error when removing a sandwich not in cart', () {
+      expect(() => cart.remove(sandwichA), returnsNormally);
+    });
+
+    test('should clear all items', () {
+      cart.add(sandwichA);
+      cart.add(sandwichB);
+      cart.clear();
       expect(cart.isEmpty, isTrue);
-      expect(cart.itemCount, equals(0));
+      expect(cart.items, isEmpty);
     });
 
-    test('items returns unmodifiable map', () {
-      cart.addItem(sandwich: veggieSixInch);
-      final items = cart.items;
-      expect(() => items[chickenSixInch] = 5, throwsUnsupportedError);
+    test('getQuantity returns correct quantity', () {
+      cart.add(sandwichA, quantity: 4);
+      expect(cart.getQuantity(sandwichA), 4);
+      expect(cart.getQuantity(sandwichB), 0);
     });
 
-    test('itemCount calculates total quantity correctly', () {
-      cart.addItem(sandwich: veggieSixInch, quantity: 2);
-      cart.addItem(sandwich: chickenSixInch, quantity: 3);
-      expect(cart.itemCount, equals(5));
+    test('items getter is unmodifiable', () {
+      cart.add(sandwichA);
+      final Map<Sandwich, int> items = cart.items;
+      expect(() => items[sandwichB] = 2, throwsUnsupportedError);
     });
 
-    test('different sandwiches are tracked separately', () {
-      cart.addItem(sandwich: veggieSixInch, quantity: 2);
-      cart.addItem(sandwich: veggieFootlong, quantity: 1);
-      expect(cart.items.length, equals(2));
+    test('totalPrice calculates sum using PricingRepository', () {
+      cart.add(sandwichA, quantity: 2);
+      cart.add(sandwichB, quantity: 1);
+      expect(cart.totalPrice, isA<double>());
+      expect(cart.totalPrice, greaterThan(0));
+    });
+
+    test('should handle adding and removing multiple sandwiches correctly', () {
+      cart.add(sandwichA, quantity: 2);
+      cart.add(sandwichB, quantity: 3);
+      cart.remove(sandwichA, quantity: 1);
+      cart.remove(sandwichB, quantity: 2);
+      expect(cart.getQuantity(sandwichA), 1);
+      expect(cart.getQuantity(sandwichB), 1);
+      expect(cart.length, 2);
+    });
+
+    test('should not allow negative quantities', () {
+      cart.add(sandwichA, quantity: 2);
+      cart.remove(sandwichA, quantity: 5);
+      expect(cart.getQuantity(sandwichA), 0);
+      expect(cart.isEmpty, isTrue);
     });
   });
 }

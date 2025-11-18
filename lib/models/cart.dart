@@ -1,41 +1,66 @@
-import '../models/sandwich.dart';
-import '../repositories/pricing_repository.dart';
+import 'sandwich.dart';
+import 'package:sandwich_shop/repositories/pricing_repository.dart';
 
 class Cart {
-  final Map<Sandwich, int> _items = {}; // Map of Sandwich -> quantity
-  final PricingRepository _pricingRepository = PricingRepository();
+  final Map<Sandwich, int> _items = {};
 
-  void addItem({required Sandwich sandwich, int quantity = 1}) {
-    _items[sandwich] = (_items[sandwich] ?? 0) + quantity;
-  }
+  // Returns a read-only copy of the items and their quantities
+  Map<Sandwich, int> get items => Map.unmodifiable(_items);
 
-  void removeItem({required Sandwich sandwich, int quantity = 1}) {
-    if (!_items.containsKey(sandwich)) return;
-
-    _items[sandwich] = _items[sandwich]! - quantity;
-    if (_items[sandwich]! <= 0) {
-      _items.remove(sandwich);
+  void add(Sandwich sandwich, {int quantity = 1}) {
+    if (_items.containsKey(sandwich)) {
+      _items[sandwich] = _items[sandwich]! + quantity;
+    } else {
+      _items[sandwich] = quantity;
     }
   }
 
-  void clearCart() {
+  void remove(Sandwich sandwich, {int quantity = 1}) {
+    if (_items.containsKey(sandwich)) {
+      final currentQty = _items[sandwich]!;
+      if (currentQty > quantity) {
+        _items[sandwich] = currentQty - quantity;
+      } else {
+        _items.remove(sandwich);
+      }
+    }
+  }
+
+  void clear() {
     _items.clear();
   }
 
   double get totalPrice {
+    final pricingRepository = PricingRepository();
     double total = 0.0;
-    for (final entry in _items.entries) {
-      total += _pricingRepository.calculatePrice(
-        quantity: entry.value,
-        isFootlong: entry.key.isFootlong,
+
+    for (Sandwich sandwich in _items.keys) {
+      int quantity = _items[sandwich]!;
+      total += pricingRepository.calculatePrice(
+        quantity: quantity,
+        isFootlong: sandwich.isFootlong,
       );
+    }
+
+    return total;
+  }
+
+  bool get isEmpty => _items.isEmpty;
+
+  int get length => _items.length;
+
+  int get countOfItems {
+    int total = 0;
+    for (Sandwich sandwich in _items.keys) {
+      total += _items[sandwich]!;
     }
     return total;
   }
 
-  Map<Sandwich, int> get items => Map.unmodifiable(_items);
-
-  bool get isEmpty => _items.isEmpty;
-
-  int get itemCount => _items.values.fold(0, (sum, qty) => sum + qty);
+  int getQuantity(Sandwich sandwich) {
+    if (_items.containsKey(sandwich)) {
+      return _items[sandwich]!;
+    }
+    return 0;
+  }
 }
