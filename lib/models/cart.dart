@@ -93,4 +93,25 @@ class Cart {
     }
     return 0;
   }
+
+  /// Returns the total price for [sandwich] in the cart (unit price * quantity)
+  /// Uses [PricingRepository] as the single source of pricing rules.
+  double itemTotalPrice(Sandwich sandwich) {
+    final pricingRepository = PricingRepository();
+    final qty = getQuantity(sandwich);
+    if (qty == 0) return 0.0;
+    return pricingRepository.calculatePrice(
+      quantity: qty,
+      isFootlong: sandwich.isFootlong,
+    );
+  }
+
+  /// Returns the unit price for [sandwich] (price for quantity == 1).
+  double unitPrice(Sandwich sandwich) {
+    final pricingRepository = PricingRepository();
+    return pricingRepository.calculatePrice(
+      quantity: 1,
+      isFootlong: sandwich.isFootlong,
+    );
+  }
 }

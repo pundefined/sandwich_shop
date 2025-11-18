@@ -3,7 +3,6 @@ import 'package:sandwich_shop/views/app_styles.dart';
 import 'package:sandwich_shop/views/order_screen.dart';
 import 'package:sandwich_shop/models/cart.dart';
 import 'package:sandwich_shop/models/sandwich.dart';
-import 'package:sandwich_shop/repositories/pricing_repository.dart';
 
 class CartScreen extends StatefulWidget {
   final Cart cart;
@@ -27,14 +26,6 @@ class _CartScreenState extends State<CartScreen> {
     } else {
       return 'Six-inch';
     }
-  }
-
-  double _getItemPrice(Sandwich sandwich, int quantity) {
-    final PricingRepository pricingRepository = PricingRepository();
-    return pricingRepository.calculatePrice(
-      quantity: quantity,
-      isFootlong: sandwich.isFootlong,
-    );
   }
 
   @override
@@ -112,7 +103,7 @@ class _CartScreenState extends State<CartScreen> {
                               ),
                               const Spacer(),
                               Text(
-                                '£${_getItemPrice(entry.key, widget.cart.getQuantity(entry.key)).toStringAsFixed(2)}',
+                                '£${widget.cart.itemTotalPrice(entry.key).toStringAsFixed(2)}',
                                 style: normalText,
                               ),
                               const SizedBox(width: 8),
