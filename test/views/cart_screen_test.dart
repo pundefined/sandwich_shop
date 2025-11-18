@@ -41,7 +41,8 @@ void main() {
       expect(find.text('Cart View'), findsOneWidget);
       expect(find.text('Veggie Delight'), findsOneWidget);
       expect(find.text('Footlong on white bread'), findsOneWidget);
-      expect(find.text('Qty: 2 - £22.00'), findsOneWidget);
+      expect(find.text('2'), findsOneWidget);
+      expect(find.text('£22.00'), findsOneWidget);
       expect(find.text('Total: £22.00'), findsOneWidget);
     });
 
@@ -72,8 +73,8 @@ void main() {
       expect(find.text('Chicken Teriyaki'), findsOneWidget);
       expect(find.text('Footlong on white bread'), findsOneWidget);
       expect(find.text('Six-inch on wheat bread'), findsOneWidget);
-      expect(find.text('Qty: 1 - £11.00'), findsOneWidget);
-      expect(find.text('Qty: 3 - £21.00'), findsOneWidget);
+      expect(find.text('£11.00'), findsOneWidget);
+      expect(find.text('£21.00'), findsOneWidget);
       expect(find.text('Total: £32.00'), findsOneWidget);
     });
 
@@ -135,8 +136,56 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      expect(find.text('Qty: 3 - £33.00'), findsOneWidget);
+      expect(find.text('£33.00'), findsOneWidget);
       expect(find.text('Total: £33.00'), findsOneWidget);
+    });
+
+    testWidgets('increment, decrement and delete update UI and total',
+        (WidgetTester tester) async {
+      final Cart cart = Cart();
+      final Sandwich sandwich = Sandwich(
+        type: SandwichType.veggieDelight,
+        isFootlong: true,
+        breadType: BreadType.white,
+      );
+      cart.add(sandwich, quantity: 1);
+
+      final CartScreen cartScreen = CartScreen(cart: cart);
+      final MaterialApp app = MaterialApp(home: cartScreen);
+      await tester.pumpWidget(app);
+
+      // initial assertions
+      expect(find.text('£11.00'), findsOneWidget);
+      expect(find.text('Total: £11.00'), findsOneWidget);
+
+      // tap the add button (increment)
+      final Finder addIcon = find.byIcon(Icons.add);
+      expect(addIcon, findsWidgets);
+      await tester.tap(addIcon.first);
+      await tester.pumpAndSettle();
+
+      // now quantity should be 2 and total 22.00
+      expect(find.text('2'), findsOneWidget);
+      expect(find.text('£22.00'), findsOneWidget);
+      expect(find.text('Total: £22.00'), findsOneWidget);
+
+      // tap the remove button (decrement)
+      final Finder removeIcon = find.byIcon(Icons.remove);
+      expect(removeIcon, findsWidgets);
+      await tester.tap(removeIcon.first);
+      await tester.pumpAndSettle();
+
+      expect(find.text('1'), findsOneWidget);
+      expect(find.text('Total: £11.00'), findsOneWidget);
+
+      // tap the delete icon to remove the item
+      final Finder deleteIcon = find.byIcon(Icons.delete);
+      expect(deleteIcon, findsWidgets);
+      await tester.tap(deleteIcon.first);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Veggie Delight'), findsNothing);
+      expect(find.text('Total: £0.00'), findsOneWidget);
     });
   });
 }
