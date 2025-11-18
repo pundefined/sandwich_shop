@@ -117,5 +117,44 @@ void main() {
       expect(cart.getQuantity(sandwichA), 0);
       expect(cart.isEmpty, isTrue);
     });
+
+    test('increment helper increases quantity', () {
+      cart.add(sandwichA, quantity: 1);
+      cart.increment(sandwichA);
+      expect(cart.getQuantity(sandwichA), 2);
+
+      // increment by custom amount
+      cart.increment(sandwichA, by: 3);
+      expect(cart.getQuantity(sandwichA), 5);
+    });
+
+    test('decrement helper decreases quantity and removes when zero', () {
+      cart.add(sandwichA, quantity: 3);
+      cart.decrement(sandwichA);
+      expect(cart.getQuantity(sandwichA), 2);
+
+      cart.decrement(sandwichA, by: 2);
+      expect(cart.getQuantity(sandwichA), 0);
+      expect(cart.isEmpty, isTrue);
+    });
+
+    test('updateQuantity sets exact quantity and removes when <= 0', () {
+      cart.updateQuantity(sandwichA, 4);
+      expect(cart.getQuantity(sandwichA), 4);
+
+      cart.updateQuantity(sandwichA, 0);
+      expect(cart.getQuantity(sandwichA), 0);
+      expect(cart.isEmpty, isTrue);
+    });
+
+    test('unitPrice and itemTotalPrice use PricingRepository correctly', () {
+      cart.add(sandwichA, quantity: 2);
+      expect(cart.unitPrice(sandwichA), equals(7.00));
+      expect(cart.itemTotalPrice(sandwichA), equals(14.00));
+
+      cart.add(sandwichB, quantity: 1);
+      expect(cart.unitPrice(sandwichB), equals(11.00));
+      expect(cart.itemTotalPrice(sandwichB), equals(11.00));
+    });
   });
 }
