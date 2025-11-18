@@ -1,113 +1,54 @@
-# Sign-in Screen — Feature & UX Prompt
+## Sign-in Screen — Behaviors & Acceptance Criteria
 
-This document describes the frontend-only Sign-in screen for the Sandwich Shop app. It specifies the UI elements, behaviors, user flows, validation rules, and acceptance criteria for implementing the screen in Flutter.
+This document describes the expected user-facing behavior for a Sign-in screen. It intentionally avoids low-level implementation details; instead it focuses on what the screen should do, how it should feel, and what counts as success.
 
-## Purpose
+### Purpose
 
-Provide a clean, accessible sign-in screen where users can enter a username and password and attempt to log in. Authentication and persistence are out of scope for now: the UI should call a placeholder callback (e.g. `onLogin(username, password)`) which the app will later implement to perform real authentication.
+Let users sign in by entering their username and password. This is a UI-only specification — backend authentication and persistence are out of scope for now.
 
-## Where to place
+### Key user-facing behaviours
 
-- File: `lib/views/login_screen.dart` (recommended)
-- Strings moved into localization later (for now, keep inline strings but mark them for extraction)
+- The screen asks the user for two inputs: a username and a password.
+- The password entry hides characters by default and offers an affordance to reveal the password while typing.
+- The primary action is a prominent "Sign in" action. Secondary actions may include "Forgot password" and "Create account" links.
+- The primary action is only available when the form is in a valid state.
+- Tapping "Sign in" runs client-side validation, shows a clear loading state while the app attempts to sign in, and then either proceeds on success or shows an error on failure.
 
-## Visual layout
+### Expected states
 
-- AppBar with title: "Sign in".
-- Vertical column with the following, centered horizontally with comfortable side padding:
-  - App logo or illustration (optional, small, above fields)
-  - TextField: Username
-    - Label: "Username"
-    - Hint: "Enter your username"
-    - Leading icon: person/user
-    - Keyboard type: text
-    - Text input action: next (moves focus to password)
-  - TextField: Password
-    - Label: "Password"
-    - Hint: "Enter your password"
-    - Leading icon: lock
-    - Trailing icon: toggle show/hide password
-    - Obscure text by default
-    - Text input action: done (submits form)
-  - Small link: "Forgot password?" (tappable, placeholder action)
-  - Primary button: "Sign in"
-    - Full-width
-    - Elevated / prominent
-    - Disabled when form invalid or loading
-  - Secondary action: "Create account" (text button) — navigates to sign-up screen in future
-  - Area for error message (inline) under the button. Use red text and accessible semantics.
+- Idle: user can type in fields.
+- Validation errors: when fields are invalid, show clear inline messages describing the problem (for example: "Username is required" or "Password must be at least 6 characters").
+- Loading: after submitting, show a spinner or progress affordance and disable inputs so the user cannot submit multiple times.
+- Error: if sign-in fails, show a concise, readable error message and allow the user to retry.
+- Success: on successful sign-in, the app proceeds to the next logical screen or state. The sign-in UI itself should expose a clear success path for the app to follow.
 
-- Use consistent spacing (8-16 px increments). On small screens ensure content scrolls (wrap in SingleChildScrollView).
+### Validation (high-level)
 
-## States
+- Username: must be present and reasonable length (e.g., not empty).
+- Password: must be present and of reasonable strength/length.
 
-1. Idle: fields editable, button enabled only if validation passes.
-2. Invalid: show inline validation messages below the respective field(s) (e.g., "Username is required").
-3. Loading: after tapping "Sign in", show a progress indicator inside the button or replace button with a circular indicator, disable fields and buttons.
-4. Error: show an inline error banner/text with the failure reason (e.g., "Invalid credentials"). Allow retry.
-5. Success: call `onLoginSuccess()` callback or navigate to main screen (placeholder). For now, emit a success callback to be handled by app logic.
+Validation is performed on submit and surfaced inline so users know exactly what to fix.
 
-## Form validation rules (client-side)
+### Interaction flow (user perspective)
 
-- Username: required, not blank, minimum 3 characters (recommendation).
-- Password: required, not blank, minimum 6 characters (recommendation).
-- Validation should occur on form submit and after field blur (or as user types for better UX). Keep messages concise.
+1. User arrives on the Sign-in screen.
+2. User enters username and password.
+3. When both entries are acceptable, the "Sign in" button becomes actionable.
+4. User taps "Sign in". The UI validates inputs, shows a loading indicator, and waits for the result.
+5. If sign-in succeeds, the app advances to the next screen/state.
+6. If sign-in fails, an error message is shown and the user can correct inputs and retry.
 
-## Interaction flow
+### Accessibility & UX considerations
 
-1. User opens Sign-in screen.
-2. User taps Username field and enters username.
-3. User taps Next on keyboard — focus moves to Password.
-4. User enters password. Optionally toggles "show password" to verify entry.
-5. When both fields are valid, the "Sign in" button becomes enabled.
-6. User taps "Sign in":
-   - UI validates fields again.
-   - If invalid, show validation errors and stop.
-   - If valid, call `onLogin(username, password)` (a synchronous / asynchronous placeholder). Enter Loading state.
-7. While loading, inputs and buttons are disabled and a spinner is shown.
-8. Placeholder callback resolves with either success or failure:
-   - On success: call `onLoginSuccess()` or navigate to the app's main screen (for now, the callback should be used so app decides navigation).
-   - On failure: exit loading, show error message with `retry` option.
+- Provide clear labels for inputs and actions so assistive technologies can announce them.
+- Announce validation errors and failure messages in a way that screen readers will detect.
+- Ensure controls have adequate size and contrast and that focus order follows the visual order.
 
-Note: Since we aren't implementing authentication, make the callback injectable (constructor parameter) so tests can simulate success/failure.
+### Acceptance criteria (what 'done' looks like)
 
-## Accessibility
-
-- Provide `labelText` for text fields.
-- Ensure `semanticsLabel` for the show/hide password toggle.
-- Error message should be announced by screen readers (use `Semantics` or `LiveRegion` equivalent).
-- Buttons must be reachable by keyboard and have sufficient contrast.
-- Provide proper tap targets (min 44x44 logical pixels).
-
-## Keyboard and platform behaviors
-
-- On mobile, use the keyboard's "done" or "go" action to submit when on password.
-- Dismiss keyboard on submit if appropriate.
-
-## Visual/Style guidance
-
-- Reuse app theme and `app_styles.dart` for colors, spacing, and text styles.
-- Use existing button styles for consistency.
-
-## Failure and edge cases
-
-- Empty fields
-- Very long input strings (truncate display where appropriate)
-
-## Acceptance criteria
-
-- The `LoginScreen` UI is implemented and reachable in the app (or show how to navigate to it).
-- Username and Password fields have validation with clear messages.
-- Sign in button triggers the injected `onLogin` callback and shows a loading state.
-- On simulated successful callback, `onLoginSuccess()` is invoked or documented behavior occurs.
-- On simulated failure, an inline error is shown and UI allows retry.
-- Basic accessibility labels and focus order are implemented.
-
-## Testing notes
-
-- Add widget tests to assert:
-  - Button is disabled when fields invalid
-  - Button enabled when fields valid
-  - Loading state disables inputs
-  - Success callback is called on mock successful login
-  - Error message shown on mock failure
+- The screen presents username and password inputs and clearly labeled actions.
+- The UI prevents submission when inputs are clearly invalid and displays helpful inline messages.
+- The UI shows a visible loading state after submitting and prevents duplicate submissions.
+- On simulated success, the flow transitions to the next logical app state.
+- On simulated failure, the UI shows an error and allows retry.
+- Basic accessibility expectations are met (labels, readable error text, logical focus order).
