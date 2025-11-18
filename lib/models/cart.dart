@@ -26,6 +26,36 @@ class Cart {
     }
   }
 
+  /// Set the exact quantity for [sandwich].
+  /// If [quantity] <= 0 the sandwich is removed from the cart.
+  void updateQuantity(Sandwich sandwich, int quantity) {
+    if (quantity <= 0) {
+      _items.remove(sandwich);
+      return;
+    }
+
+    _items[sandwich] = quantity;
+  }
+
+  /// Convenience method to increment quantity by [by] (default 1).
+  /// Throws [ArgumentError] if [by] is negative.
+  void increment(Sandwich sandwich, {int by = 1}) {
+    if (by < 0) {
+      throw ArgumentError.value(by, 'by', 'Increment must be non-negative');
+    }
+    add(sandwich, quantity: by);
+  }
+
+  /// Convenience method to decrement quantity by [by] (default 1).
+  /// If resulting quantity <= 0 the item is removed.
+  /// Throws [ArgumentError] if [by] is negative.
+  void decrement(Sandwich sandwich, {int by = 1}) {
+    if (by < 0) {
+      throw ArgumentError.value(by, 'by', 'Decrement must be non-negative');
+    }
+    remove(sandwich, quantity: by);
+  }
+
   void clear() {
     _items.clear();
   }
