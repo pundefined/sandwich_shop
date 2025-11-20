@@ -123,35 +123,22 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: AppShell.buildDrawer(context),
-      appBar: AppBar(
-        leading: Builder(builder: (BuildContext context) {
-          return IconButton(
-            tooltip: 'Menu',
-            icon: const Icon(Icons.menu),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          );
-        }),
-        title: const Text(
-          'Sandwich Counter',
-          style: heading1,
+    return SharedScaffold(
+      title: 'Sandwich Counter',
+      actions: [
+        IconButton(
+          tooltip: 'Sign in',
+          icon: const Icon(Icons.person),
+          onPressed: () {
+            Navigator.push<void>(
+              context,
+              MaterialPageRoute<void>(
+                builder: (BuildContext context) => const SignInScreen(),
+              ),
+            );
+          },
         ),
-        actions: [
-          IconButton(
-            tooltip: 'Sign in',
-            icon: const Icon(Icons.person),
-            onPressed: () {
-              Navigator.push<void>(
-                context,
-                MaterialPageRoute<void>(
-                  builder: (BuildContext context) => const SignInScreen(),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+      ],
       body: Center(
         child: SingleChildScrollView(
           child: Column(
