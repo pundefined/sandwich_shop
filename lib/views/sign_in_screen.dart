@@ -15,10 +15,12 @@ class SignInScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: SignInForm(
-                onSubmit: (username, password) {
-                  // Placeholder submit handler for now — will be replaced by business logic later
+                onSubmit: (username, password) async {
+                  // Simulated async submit handler for testing the loading state.
+                  await Future.delayed(const Duration(seconds: 2));
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Submitted username: $username')),
+                    SnackBar(content: Text('Signed in as: $username')),
                   );
                 },
                 onForgotPassword: () {

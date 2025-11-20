@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SignInForm extends StatefulWidget {
-  final void Function(String username, String password)? onSubmit;
+  final Future<void> Function(String username, String password)? onSubmit;
   final VoidCallback? onForgotPassword;
   final VoidCallback? onCreateAccount;
 
@@ -60,8 +60,9 @@ class _SignInFormState extends State<SignInForm> {
     setState(() => _isSubmitting = true);
 
     try {
-      // Support both sync and async submit handlers by wrapping in Future
-      await Future.sync(() => widget.onSubmit?.call(username, password));
+      if (widget.onSubmit != null) {
+        await widget.onSubmit!.call(username, password);
+      }
     } catch (e) {
       // If the submit handler throws, show a basic error snackbar.
       if (mounted) {
