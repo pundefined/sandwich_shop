@@ -281,3 +281,77 @@ Acceptance criteria:
 The Sign-in screen is considered done when:
 - All functional acceptance criteria pass in unit/widget tests
 - The `prompts/requirements.md` includes this documented spec and implementation subtasks
+
+---
+
+# Drawer Navigation Feature Requirements
+
+## 1. Description and purpose
+
+Description: Add a left-side navigation Drawer that gives users quick access to the app's main destinations: Order, Cart, and Sign In. It should be easy to open, clearly labeled, and close automatically after a selection so navigation feels immediate.
+
+Purpose: Make it simple for users to move between the primary app flows without hunting for buttons.
+
+## 2. User stories
+
+- User Story: Open Drawer
+	- As a user, I want to open the navigation Drawer so I can choose where to go next.
+	- I open it by tapping the menu icon or swiping from the left edge, and it should close if I tap outside.
+
+- User Story: Navigate to Order
+	- As a customer, I want to jump back to the ordering screen so I can continue browsing or building sandwiches.
+	- Tapping "Order" closes the Drawer and takes me to the main ordering view.
+
+- User Story: Open Cart
+	- As a customer, I want to open my Cart from anywhere so I can review or change my order.
+	- Tapping "Cart" closes the Drawer and navigates to the Cart screen; if the cart is empty, I still see the empty state.
+
+- User Story: Sign In / Account
+	- As a user, I want to sign in or see my account quickly.
+	- Tapping "Sign In" closes the Drawer and opens the sign in screen (or account view if already signed in).
+
+## 3. Acceptance criteria (when the feature is complete)
+
+### Functional
+- The Drawer is available from the main app screens (accessible via menu icon and swipe where supported).
+- Drawer rows: Order, Cart, Sign In are present and labeled.
+- Tapping any row closes the Drawer and navigates to the correct screen.
+- If the app is already on the selected screen, the Drawer simply closes.
+- The currently active screen is visually highlighted in the Drawer.
+- Drawer is dismissible by tapping outside or swiping it closed.
+
+### UX / Visual
+- Each row shows an icon and a short label.
+- Touch targets are at least 44×44 dp (or platform-appropriate equivalent).
+- Selection feedback is immediate and visible (row highlight, close animation).
+
+### Performance / Reliability
+- Navigations caused by Drawer selections complete promptly (no perceptible delay).
+- The Drawer does not cause layout jank or crashes when opened, closed, or when items update frequently.
+
+### Edge cases
+- Tapping an item multiple times quickly should not create duplicate navigations.
+
+## 4. Implementation subtasks
+
+### UI
+- Add a `Drawer` widget to the app's top-level `Scaffold`.
+- Add rows for Order, Cart (with badge), and Sign In with icons and labels.
+- Highlight the active row based on the current route or screen state.
+
+### Navigation wiring
+- Wire each Drawer row to the appropriate named routes or navigation handlers.
+- Ensure the Drawer closes before or as part of the navigation for a snappy feel.
+
+### Accessibility & touch targets
+- Provide semantic labels for each row and ensure touch target sizes meet guidelines.
+
+### Testing
+- Widget tests: Drawer opens, items are visible, tapping a row closes the Drawer and triggers navigation.
+
+## 5. Acceptance checklist (subtasks mapped to acceptance criteria)
+- [ ] Drawer added to app shell and reachable from main screens.
+- [ ] Order/Cart/Sign In rows present and labeled.
+- [ ] Drawer closes and navigates when a row is tapped.
+- [ ] Active route is highlighted in the Drawer.
+- [ ] Tests added: widget tests for Drawer
