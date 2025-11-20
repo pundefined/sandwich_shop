@@ -26,6 +26,8 @@ class _SignInFormState extends State<SignInForm> {
   // Form state and validation
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isFormValid = false;
+  // Submission state
+  bool _isSubmitting = false;
 
   @override
   void dispose() {
@@ -40,7 +42,9 @@ class _SignInFormState extends State<SignInForm> {
     });
   }
 
-  void _handleSubmit() {
+  Future<void> _handleSubmit() async {
+    if (_isSubmitting) return; // prevent duplicate submissions
+
     // Validate form before submitting
     final form = _formKey.currentState;
     if (form == null) return;
@@ -52,7 +56,22 @@ class _SignInFormState extends State<SignInForm> {
 
     final username = _usernameController.text.trim();
     final password = _passwordController.text;
-    widget.onSubmit?.call(username, password);
+
+    setState(() => _isSubmitting = true);
+
+    try {
+      // Support both sync and async submit handlers by wrapping in Future
+      await Future.sync(() => widget.onSubmit?.call(username, password));
+    } catch (e) {
+      // If the submit handler throws, show a basic error snackbar.
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Sign in failed: $e')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
+    }
   }
 
   @override
@@ -69,6 +88,7 @@ class _SignInFormState extends State<SignInForm> {
               decoration: const InputDecoration(
                 labelText: 'Username',
               ),
+              enabled: !_isSubmitting,
               textInputAction: TextInputAction.next,
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
@@ -98,7 +118,10 @@ class _SignInFormState extends State<SignInForm> {
                   tooltip: _showPassword ? 'Hide password' : 'Show password',
                 ),
               ),
-              onFieldSubmitted: (_) => _handleSubmit(),
+              onFieldSubmitted: (_) {
+                if (!_isSubmitting) _handleSubmit();
+              },
+              enabled: !_isSubmitting,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a password';
@@ -120,8 +143,26 @@ class _SignInFormState extends State<SignInForm> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: _isFormValid ? _handleSubmit : null,
-                    child: const Text('Sign in'),
+                    onPressed:
+                        (_isFormValid && !_isSubmitting) ? _handleSubmit : null,
+                    child: _isSubmitting
+                        ? const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Text('Signing in...'),
+                            ],
+                          )
+                        : const Text('Sign in'),
                   ),
                 ),
               ],
@@ -131,11 +172,11 @@ class _SignInFormState extends State<SignInForm> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton(
-                  onPressed: widget.onForgotPassword,
+                  onPressed: _isSubmitting ? null : widget.onForgotPassword,
                   child: const Text('Forgot password'),
                 ),
                 TextButton(
-                  onPressed: widget.onCreateAccount,
+                  onPressed: _isSubmitting ? null : widget.onCreateAccount,
                   child: const Text('Create account'),
                 ),
               ],
