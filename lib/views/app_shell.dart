@@ -6,7 +6,10 @@ import 'package:sandwich_shop/views/sign_in_screen.dart';
 
 /// Build the application's Drawer used across screens.
 Drawer buildAppDrawer(BuildContext context) {
+  // Provide an explicit width to avoid overflow with large content
+  // and to ensure consistent layout across platforms and tests.
   return Drawer(
+    width: 320,
     child: SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -21,9 +24,12 @@ Drawer buildAppDrawer(BuildContext context) {
                   child: Image.asset('assets/images/logo.png'),
                 ),
                 const SizedBox(width: 12),
-                const Text(
-                  'Sandwich Shop',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                const Expanded(
+                  child: Text(
+                    'Sandwich Shop',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
                 ),
               ],
             ),
