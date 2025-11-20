@@ -125,20 +125,6 @@ class _OrderScreenState extends State<OrderScreen> {
   Widget build(BuildContext context) {
     return SharedScaffold(
       title: 'Sandwich Counter',
-      actions: [
-        IconButton(
-          tooltip: 'Sign in',
-          icon: const Icon(Icons.person),
-          onPressed: () {
-            Navigator.push<void>(
-              context,
-              MaterialPageRoute<void>(
-                builder: (BuildContext context) => const SignInScreen(),
-              ),
-            );
-          },
-        ),
-      ],
       body: Center(
         child: SingleChildScrollView(
           child: Column(
