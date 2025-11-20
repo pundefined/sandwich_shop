@@ -168,3 +168,116 @@ Enable users to dynamically modify items in their shopping cart by adjusting qua
 - [ ] Write unit tests for Pricing calculations
 - [ ] Write widget tests for UI components
 - [ ] Perform manual testing on multiple device sizes
+
+---
+
+# Requirements Document: Sign-in Screen (Detailed)
+
+## 1. Feature Description & Purpose
+
+### Purpose
+Provide a polished, accessible Sign-in screen that allows users to authenticate with a username and password. This feature is UI-only (no server authentication integration required for initial implementation) and focuses on clear validation, secure input handling, and a smooth user experience that prevents duplicate submissions and surfaces clear errors.
+
+### Scope
+- Username and password input fields
+- Password visibility toggle (show/hide)
+- Primary action: `Sign in` (enabled only when form is valid)
+- Secondary actions: `Forgot password` and `Create account` (navigation placeholders)
+- Client-side validation and loading state
+- Accessible labels and error announcements
+
+### Out of Scope
+- Backend authentication, session persistence, and deep navigation flows
+- Remember-me or password storage
+- Social sign-in (Google/Apple)
+
+## 2. User Stories
+
+### User Story 1: Returning User
+**As a** returning customer
+**I want to** sign in using my username and password
+**So that** I can continue with my saved preferences and complete my order faster
+
+Acceptance criteria:
+- I can enter my username and password
+- The `Sign in` button becomes enabled only when inputs are valid
+- On tapping `Sign in`, the UI shows a loading state and disables inputs
+- On simulated success, the screen triggers the app's success handler
+
+### User Story 2: New User Exploring Options
+**As a** new user
+**I want to** see a clear `Create account` option and guidance
+**So that** I can create an account if I don't already have one
+
+Acceptance criteria:
+- A visible `Create account` link is present
+- Tapping it calls the placeholder navigation handler for account creation
+
+### User Story 3: User Who Forgot Password
+**As a** user who forgot my password
+**I want to** see a `Forgot password` link
+**So that** I can recover my account via the next steps (out-of-scope)
+
+Acceptance criteria:
+- A visible `Forgot password` link is present and triggers a placeholder action
+
+## 3. Acceptance Criteria
+
+### Functional Requirements
+
+- FR-1: Inputs
+	- [ ] `Username` input is present and accepts text
+	- [ ] `Password` input is present and masks input by default
+	- [ ] Password visibility toggle reveals/hides the password
+
+- FR-2: Validation
+	- [ ] `Username` must be non-empty
+	- [ ] `Password` must be non-empty and at least 6 characters (configurable)
+	- [ ] Validation runs on submit and optionally on blur
+	- [ ] Inline validation messages are shown for invalid fields
+
+- FR-3: Submit Behavior
+	- [ ] `Sign in` button disabled when form invalid
+	- [ ] Tapping `Sign in` with valid data shows a loading indicator and disables inputs
+	- [ ] Duplicate submissions are prevented while loading
+	- [ ] On simulated success, the screen invokes a success callback
+	- [ ] On simulated failure, a clear error message is shown and inputs re-enabled
+
+- FR-4: Secondary Actions
+	- [ ] `Forgot password` link present and triggers a handler
+	- [ ] `Create account` link present and triggers a handler
+
+### UX / Visual Requirements
+
+- UX-1: Button / Control Visibility
+	- [ ] Primary action (`Sign in`) is visually prominent
+	- [ ] Toggle and secondary links are clearly visible but visually secondary
+
+- UX-2: Responsiveness
+	- [ ] Controls are touch-friendly (≥ 44x44dp equivalent)
+	- [ ] Layout adapts to narrow and wide screens
+
+### Accessibility Requirements
+
+- A11Y-1: Labels & Hints
+	- [ ] Every input has an accessible label
+	- [ ] Password toggle is accessible and has a descriptive label
+
+## 4. Subtasks (Implementation & Testing)
+
+- Implementation
+	- [ ] Add `SignInForm` widget with `username`, `password`, and `showPassword` state
+	- [ ] Implement password visibility toggle control
+	- [ ] Implement client-side validation and form state management
+	- [ ] Implement loading state and submit debounce / disable
+	- [ ] Add `Forgot password` and `Create account` callback hooks
+
+- Testing
+	- [ ] Unit tests for validation rules (username empty, password length)
+	- [ ] Widget tests for visual states (idle, validation errors, loading, error)
+
+## 5. Done Definition
+
+The Sign-in screen is considered done when:
+- All functional acceptance criteria pass in unit/widget tests
+- The `prompts/requirements.md` includes this documented spec and implementation subtasks
