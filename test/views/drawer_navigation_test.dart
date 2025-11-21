@@ -6,7 +6,7 @@ void main() {
   group('App Drawer navigation', () {
     testWidgets('Drawer shows Order, Cart and Sign In entries',
         (WidgetTester tester) async {
-      await tester.pumpWidget(MediaQuery(
+      await tester.pumpWidget(const MediaQuery(
         data: MediaQueryData(
             size: Size(800, 600), textScaler: TextScaler.linear(1.0)),
         child: MaterialApp(home: OrderScreen()),
@@ -25,7 +25,7 @@ void main() {
 
     testWidgets('Tapping Cart closes drawer and navigates to Cart View',
         (WidgetTester tester) async {
-      await tester.pumpWidget(MediaQuery(
+      await tester.pumpWidget(const MediaQuery(
         data: MediaQueryData(
             size: Size(800, 600), textScaler: TextScaler.linear(1.0)),
         child: MaterialApp(home: OrderScreen()),
@@ -45,7 +45,7 @@ void main() {
 
     testWidgets('Tapping Sign In closes drawer and navigates to Sign in',
         (WidgetTester tester) async {
-      await tester.pumpWidget(MediaQuery(
+      await tester.pumpWidget(const MediaQuery(
         data: MediaQueryData(
             size: Size(800, 600), textScaler: TextScaler.linear(1.0)),
         child: MaterialApp(home: OrderScreen()),
@@ -66,7 +66,7 @@ void main() {
 
     testWidgets('Tapping Order closes drawer and stays on Order screen',
         (WidgetTester tester) async {
-      await tester.pumpWidget(MediaQuery(
+      await tester.pumpWidget(const MediaQuery(
         data: MediaQueryData(
             size: Size(800, 600), textScaler: TextScaler.linear(1.0)),
         child: MaterialApp(home: OrderScreen()),
