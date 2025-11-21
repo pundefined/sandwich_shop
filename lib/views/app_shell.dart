@@ -42,7 +42,7 @@ Drawer buildAppDrawer(BuildContext context) {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute<void>(
-                  builder: (BuildContext context) => OrderScreen(),
+                  builder: (BuildContext context) => const OrderScreen(),
                 ),
               );
             },
