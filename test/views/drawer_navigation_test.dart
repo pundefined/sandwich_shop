@@ -7,8 +7,9 @@ void main() {
     testWidgets('Drawer shows Order, Cart and Sign In entries',
         (WidgetTester tester) async {
       await tester.pumpWidget(MediaQuery(
-        data: const MediaQueryData(size: Size(800, 600), textScaleFactor: 1.0),
-        child: const MaterialApp(home: OrderScreen()),
+        data: MediaQueryData(
+            size: Size(800, 600), textScaler: TextScaler.linear(1.0)),
+        child: MaterialApp(home: OrderScreen()),
       ));
 
       // Open the drawer by tapping the menu icon
@@ -25,8 +26,9 @@ void main() {
     testWidgets('Tapping Cart closes drawer and navigates to Cart View',
         (WidgetTester tester) async {
       await tester.pumpWidget(MediaQuery(
-        data: const MediaQueryData(size: Size(800, 600), textScaleFactor: 1.0),
-        child: const MaterialApp(home: OrderScreen()),
+        data: MediaQueryData(
+            size: Size(800, 600), textScaler: TextScaler.linear(1.0)),
+        child: MaterialApp(home: OrderScreen()),
       ));
 
       // Open drawer
@@ -44,8 +46,9 @@ void main() {
     testWidgets('Tapping Sign In closes drawer and navigates to Sign in',
         (WidgetTester tester) async {
       await tester.pumpWidget(MediaQuery(
-        data: const MediaQueryData(size: Size(800, 600), textScaleFactor: 1.0),
-        child: const MaterialApp(home: OrderScreen()),
+        data: MediaQueryData(
+            size: Size(800, 600), textScaler: TextScaler.linear(1.0)),
+        child: MaterialApp(home: OrderScreen()),
       ));
 
       // Open drawer
@@ -64,8 +67,9 @@ void main() {
     testWidgets('Tapping Order closes drawer and stays on Order screen',
         (WidgetTester tester) async {
       await tester.pumpWidget(MediaQuery(
-        data: const MediaQueryData(size: Size(800, 600), textScaleFactor: 1.0),
-        child: const MaterialApp(home: OrderScreen()),
+        data: MediaQueryData(
+            size: Size(800, 600), textScaler: TextScaler.linear(1.0)),
+        child: MaterialApp(home: OrderScreen()),
       ));
 
       // Ensure we're on Order screen
